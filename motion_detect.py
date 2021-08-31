@@ -4,7 +4,9 @@ class Motion():
         pass
     def detect_motion(self,cap):
         _,frame1=cap.read()
+        frame1=cv2.flip(frame1,1)
         _,frame2=cap.read()
+        frame2=cv2.flip(frame2,1)
         diff=cv2.absdiff(frame1,frame2)
         imggray=cv2.cvtColor(diff,cv2.COLOR_BGR2GRAY)
         _,img_thres=cv2.threshold(imggray,50,255,cv2.THRESH_BINARY)
@@ -12,7 +14,7 @@ class Motion():
         contours,hierarchy=cv2.findContours(imgdil,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
         for cnt in contours:
             area=cv2.contourArea(cnt)
-            if abs(area)>5000:
+            if abs(area)>4000:
                 perimeter=cv2.arcLength(cnt,True)
                 approx=cv2.approxPolyDP(cnt,0.02*perimeter,True)
                 x,y,w,h=cv2.boundingRect(approx)
